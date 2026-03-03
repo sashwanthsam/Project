@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To-Do List</title>
+    <link rel="stylesheet" href="to-do.css">
+</head>
+<body>
+    <header>To-Do List ✏️</header>
+    <main>
+        <div class="input-container">
+            <input class="input-task js-input-task" type="text" placeholder="Task">
+            <input class="input-date js-input-date" type="date" placeholder="Date">
+            <button class="button-add-task js-button">Add Task</button> 
+        </div>
+
+        <div class="task-filter">
+        <div class="task-count">
+            Total :<span class="js-count-total countT">0</span>|
+            Completed :<span class="js-count-completed countC">0</span>|
+            Pending :<span class="js-count-pending countP">0</span>
+        </div>
+        <div><select id="filter" class="filter-container" >
+            <option value="all" selected>All</option>
+            <option value="completed">Completed</option>
+            <option value="pending">Pending</option>
+        </select></div>
+        </div>
+        <div class="task-container"></div>
+    </main>
+</body>
+<script src="to-do.js"></script>
+</html>
