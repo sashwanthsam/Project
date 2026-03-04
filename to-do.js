@@ -5,6 +5,7 @@ const inputTask = document.querySelector('.js-input-task');
 const inputDate = document.querySelector('.js-input-date');
 const inputButton = document.querySelector('.js-button');
 const taskContainer = document.querySelector('.task-container');
+const filterSelect = document.getElementById("filter");
 let editingIndex = null;
 
 countTask();
@@ -26,6 +27,10 @@ function countTask(){
         console.log(taskComleted,taskPending);
 };
 
+filterSelect.addEventListener("change",()=>{
+    addTaskTOScreen(taskList);
+})
+
 inputDate.addEventListener('keydown',(event)=>{
     if(event.key==='Enter'){
         inputTaskPush();
@@ -42,7 +47,7 @@ inputTask.addEventListener('keydown',(event)=>{
         const task = inputTask.value;
         const dueDate = inputDate.value;
 
-        // if(!task ||!dueDate){
+        // if(!task.trim ||!dueDate){
         //     alert("Please enter Task and Date");
         //     return;
         // }
@@ -67,7 +72,7 @@ inputTask.addEventListener('keydown',(event)=>{
         savetasks();
         // inputTask.value="";
         // inputDate.value="";
-
+       // inputTask.focus();
         
     }
 
@@ -75,8 +80,20 @@ inputButton.addEventListener('click',()=>{
    inputTaskPush();
 })
 function addTaskTOScreen(taskList){
+    const filterOption = getFilterOption();
     taskContainer.innerHTML ="";
-    taskList.forEach((task,index)=>{
+
+    let filteredTask = taskList;
+
+    if(filterOption === "completed"){
+        filteredTask = taskList.filter(task => task.completed);
+    }
+    else if(filterOption === "pending" ){
+        filteredTask = taskList.filter(task => !task.completed);
+
+    }
+
+    filteredTask.forEach((task,index)=>{
         taskContainer.innerHTML += `
         <div class="task-box ${task.completed ? 'completed-task' : ''}">
         <p>${task.text}</p>
@@ -85,9 +102,10 @@ function addTaskTOScreen(taskList){
         <button onclick="toggleComplete(${index})" class="complete-button complete-button-${index}">${task.completed?'Completed':'Complete'}</button>
         <button onclick="editbutton(${index})" class="edit-button edit-button-${index} ">✏️</button>
         </div>
-        `
-    })
-        countTask();
+        `;
+    })   
+    countTask();
+    console.log(filterOption);
 };
 
 
@@ -117,7 +135,9 @@ function savetasks(){
     localStorage.setItem('tasks',JSON.stringify(taskList));
 }
 
+function getFilterOption(){
+    return document.getElementById("filter").value;
+}
+
 console.log(taskList);
-
-
 addTaskTOScreen(taskList);
