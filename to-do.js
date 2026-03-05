@@ -8,6 +8,13 @@ const taskContainer = document.querySelector('.task-container');
 const filterSelect = document.getElementById("filter");
 let editingIndex = null;
 
+
+// const Todaydate = new Date("2026-03-04");
+// console.log(dayjs().format('YYYY-MM-DD') === "2026-03-04");
+
+// console.log(dayjs().format('YYYY-MM-DD')) 
+
+
 countTask();
 
 
@@ -46,11 +53,11 @@ inputTask.addEventListener('keydown',(event)=>{
     function inputTaskPush(){
         const task = inputTask.value;
         const dueDate = inputDate.value;
-
-        // if(!task.trim ||!dueDate){
-        //     alert("Please enter Task and Date");
-        //     return;
-        // }
+        console.log(dueDate >= dayjs().format('YYYY-MM-DD'));
+        if(!task.trim() ||!dueDate){
+            alert("Please enter Task and Date");
+            return;
+        }
 
         if(editingIndex !== null){
             taskList[editingIndex].text = task;
@@ -70,15 +77,17 @@ inputTask.addEventListener('keydown',(event)=>{
         console.log(taskList);
         addTaskTOScreen(taskList);
         savetasks();
-        // inputTask.value="";
-        // inputDate.value="";
-       // inputTask.focus();
+        inputTask.value="";
+        inputDate.value="";
+       inputTask.focus();
         
     }
 
 inputButton.addEventListener('click',()=>{
    inputTaskPush();
 })
+
+
 function addTaskTOScreen(taskList){
     const filterOption = getFilterOption();
     taskContainer.innerHTML ="";
@@ -88,26 +97,45 @@ function addTaskTOScreen(taskList){
     if(filterOption === "completed"){
         filteredTask = taskList.filter(task => task.completed);
     }
-    else if(filterOption === "pending" ){
+    else if(filterOption === "pending"){
         filteredTask = taskList.filter(task => !task.completed);
-
     }
 
-    filteredTask.forEach((task,index)=>{
+     filteredTask.forEach((task)=>{
+        const index = taskList.indexOf(task);
+
+        const isOverdue = dayjs(task.dueDate).isBefore(dayjs(), 'day') && !task.completed;
+        
         taskContainer.innerHTML += `
-        <div class="task-box ${task.completed ? 'completed-task' : ''}">
+        <div class="task-box ${task.completed ? 'completed-task' : ''} overdue-con-${isOverdue ? 'yes':''}">
         <p>${task.text}</p>
-        <p>${task.dueDate}</p>
-        <button onclick="deleteTask(${index})" class="delete-button">Delete</button>
-        <button onclick="toggleComplete(${index})" class="complete-button complete-button-${index}">${task.completed?'Completed':'Complete'}</button>
-        <button onclick="editbutton(${index})" class="edit-button edit-button-${index} ">✏️</button>
+        <p class="overdue-${isOverdue ? 'yes':''}">${task.dueDate}</p>
+        <button data-index="${index}" class="delete-button">Delete</button>
+        <button data-index="${index}" class="complete-button complete-button-${index}">${task.completed?'Completed':'Complete'}</button>
+        <button data-index="${index}" class="edit-button edit-button-${index} ">✏️</button>
         </div>
         `;
     })   
     countTask();
-    console.log(filterOption);
 };
 
+taskContainer.addEventListener("click", (event) => {
+
+  const index = event.target.dataset.index;
+
+  if(event.target.classList.contains("delete-button")){
+      deleteTask(index);
+  }
+
+  if(event.target.classList.contains("complete-button")){
+      toggleComplete(index);
+  }
+
+  if(event.target.classList.contains("edit-button")){
+      editbutton(index);
+  }
+
+});
 
 function editbutton(index){
     const task = taskList[index]
