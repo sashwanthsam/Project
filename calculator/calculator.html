@@ -67,11 +67,17 @@
     ">/</button>
 
     <button class="clear-button" onclick="
-        clear();
+        calculation =  calculation.toString().slice(0,-1) ;
+        if(calculation === ''){
+            calculation = '0';
+        }
+        localStorage.setItem('calculation',calculation);
+        document.querySelector('.final-result').innerHTML = calculation;
     ">Clear ⌫</button>
     </div>
     </div>
 
     <script src="calculator.js"></script>
 </body>
+
 </html>
