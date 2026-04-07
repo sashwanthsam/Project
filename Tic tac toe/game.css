@@ -141,10 +141,10 @@
   }
 }
 .draw{
-  animation: glowPulsex 1s infinite alternate;
+  animation: draw 1s infinite alternate;
 }
 
-@keyframes glowPulsex {
+@keyframes draw {
   from {
     box-shadow: 0 0 5px #dcdcdc;
   }
