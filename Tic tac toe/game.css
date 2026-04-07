@@ -133,11 +133,14 @@
 }
 
 @keyframes glowPulsex {
-  from {
-    box-shadow: 0 0 5px #1d8eff;
+from {
+    box-shadow: 0 0 10px #185FA5;
   }
   to {
-    box-shadow: 0 0 20px #009dff, 0 0 40px #0289ff;
+    box-shadow:
+      0 0 30px #0080ff,
+      0 0 60px #0080ff,
+      0 0 100px #0080ff;
   }
 }
 .draw{
